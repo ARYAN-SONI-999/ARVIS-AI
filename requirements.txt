@@ -14,12 +14,11 @@ gunicorn>=21.2.0                     # WSGI server for production hosting
 pyttsx3>=2.90                        # Offline TTS
 gTTS>=2.5.0                          # Google TTS (online, better quality)
 SpeechRecognition>=3.10.0            # Google STT (free)
-pyaudio>=0.2.14                      # Microphone access for SpeechRecognition
-
+pyaudio>=0.2.14; sys_platform == 'win32'  # Microphone access for SpeechRecognition
 
 # Computer Control
 pyautogui>=0.9.54                    # Mouse, keyboard, screenshots
-pygetwindow>=0.0.9                   # Window management
+pygetwindow>=0.0.9; sys_platform == 'win32' # Window management
 pillow>=10.0.0                       # Image handling
 
 # Web Search
