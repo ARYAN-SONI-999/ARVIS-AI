@@ -20,8 +20,9 @@ def index():
 @web_bp.route('/dashboard')
 def dashboard():
     """Renders the interactive AI dashboard."""
-    # Trigger welcome greeting only when the dashboard page loads
-    tts.speak_async(f"Hello {config.USER_NAME}! I am {config.AGENT_NAME}, your AI assistant. All systems are online. How can I help you today?")
+    # Trigger welcome greeting only when the dashboard page loads (skip on cloud)
+    if os.environ.get("RENDER") != "true":
+        tts.speak_async(f"Hello {config.USER_NAME}! I am {config.AGENT_NAME}, your AI assistant. All systems are online. How can I help you today?")
     return render_template('dashboard.html', agent_name=config.AGENT_NAME, user_name=config.USER_NAME)
 
 @web_bp.route('/landing')

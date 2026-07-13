@@ -17,6 +17,9 @@ class TTSEngine:
 
     def _get_offline_engine(self):
         if not hasattr(self._thread_local, 'engine'):
+            if os.environ.get("RENDER") == "true":
+                self._thread_local.engine = None
+                return None
             try:
                 engine = pyttsx3.init()
                 engine.setProperty('rate', config.VOICE_SPEED)
