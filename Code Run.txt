@@ -1,0 +1,18 @@
+1.If you prefer running it manually:
+
+2.Open Command Prompt (cmd) or PowerShell.
+  Navigate to your project directory:
+
+  cd "E:\MY AI\real"
+
+3.Activate the virtual environment:
+
+  venv\Scripts\activate.bat
+
+  .\venv\Scripts\Activate.ps1
+
+4.Run the main server application:
+
+python main.py
+
+Open your web browser and go to http://127.0.0.1:5000.

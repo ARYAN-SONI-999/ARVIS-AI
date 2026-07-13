@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Sci-Fi background canvas for glowing particle connection lines -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- Ambient Glowing Orbs -->
+<div class="aura-orb aura-orb-1"></div>
+<div class="aura-orb aura-orb-2"></div>
+
+<div class="app-container">
+    <!-- Header -->
+    <header class="glass-panel">
+        <div class="logo-section">
+            <div class="logo-orb">A</div>
+            <div class="logo-text">
+                <h1>{{ agent_name }} AI</h1>
+                <p>Personal Agentic System</p>
+            </div>
+        </div>
+        <div class="status-panel">
+            <div class="status-indicator" id="api-status">
+                <span class="status-dot green"></span>
+                <span class="status-label">GROQ: ONLINE</span>
+            </div>
+            <button id="voice-toggle-btn" class="glass-btn btn-inactive">
+                <i class="fa-solid fa-microphone-slash"></i>
+                <span id="voice-btn-text">Voice Listener: OFF</span>
+            </button>
+            <a href="/settings" class="glass-btn" style="padding: 10px 15px;" title="System Settings">
+                <i class="fa-solid fa-gear"></i> Settings
+            </a>
+        </div>
+    </header>
+
+    <!-- Workspace -->
+    <div class="workspace">
+        <!-- Sidebar Gauges -->
+        <aside class="sidebar glass-panel">
+            <div class="widget-header">
+                <h2>SYSTEM PERFORMANCE</h2>
+            </div>
+            
+            <div class="gauges-container">
+                <!-- CPU SVG Gauge -->
+                <div class="gauge-card">
+                    <div class="gauge-svg-container">
+                        <svg class="gauge-svg" viewBox="0 0 100 100">
+                            <circle class="gauge-track" cx="50" cy="50" r="40" />
+                            <circle class="gauge-fill cpu-fill" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="251.2" />
+                        </svg>
+                        <div class="gauge-pct" id="cpu-value">0%</div>
+                    </div>
+                    <div class="gauge-label">CPU</div>
+                </div>
+
+                <!-- RAM SVG Gauge -->
+                <div class="gauge-card">
+                    <div class="gauge-svg-container">
+                        <svg class="gauge-svg" viewBox="0 0 100 100">
+                            <circle class="gauge-track" cx="50" cy="50" r="40" />
+                            <circle class="gauge-fill ram-fill" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="251.2" />
+                        </svg>
+                        <div class="gauge-pct" id="ram-value">0%</div>
+                    </div>
+                    <div class="gauge-label">RAM</div>
+                </div>
+            </div>
+
+            <!-- Battery Status -->
+            <div class="battery-widget">
+                <div class="metric-row">
+                    <span class="metric-lbl">Battery Power</span>
+                    <span class="metric-val" id="battery-txt">100%</span>
+                </div>
+                <div class="battery-bar-container">
+                    <div class="battery-bar-fill" id="battery-fill" style="width: 100%;"></div>
+                </div>
+                <div class="metric-row mt-10">
+                    <span class="metric-lbl">OS Version</span>
+                    <span class="metric-val" id="os-txt">Windows</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-lbl">Active User</span>
+                    <span class="metric-val" id="user-txt">{{ user_name }}</span>
+                </div>
+            </div>
+
+            <!-- Quick Action Grid -->
+            <div class="widget-header mt-20">
+                <h2>QUICK SHORTS</h2>
+            </div>
+            <div class="action-grid">
+                <button class="action-btn" onclick="sendQuickCommand('Show me system statistics')">
+                    <i class="fa-solid fa-chart-line text-blue"></i>
+                    <span>Sys Stats</span>
+                </button>
+                <button class="action-btn" id="screenshot-btn">
+                    <i class="fa-solid fa-camera text-purple"></i>
+                    <span>Screenshot</span>
+                </button>
+                <button class="action-btn" onclick="sendQuickCommand('Search Google for current news in technology')">
+                    <i class="fa-solid fa-earth-americas text-cyan"></i>
+                    <span>Web Search</span>
+                </button>
+                <button class="action-btn" onclick="sendQuickCommand('List my workspace directory contents')">
+                    <i class="fa-solid fa-folder-open text-yellow"></i>
+                    <span>List Files</span>
+                </button>
+            </div>
+            <button class="action-btn" onclick="clearChatLogs()" style="margin-top: 15px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(255, 0, 128, 0.05); border: 1px solid rgba(255, 0, 128, 0.15); border-radius: 8px; padding: 10px; color: var(--text-light); cursor: pointer; transition: all 0.3s ease;">
+                <i class="fa-solid fa-trash-can" style="color: var(--neon-pink);"></i>
+                <span style="font-size: 13px; font-weight: 500; letter-spacing: 0.5px; font-family: 'Orbitron', sans-serif;">CLEAR LOGS</span>
+            </button>
+        </aside>
+
+        <!-- Main Chat Arena -->
+        <main class="chat-arena glass-panel">
+            <div class="chat-header">
+                <div class="session-lbl">ARVIS CORE EXECUTION WORKSPACE</div>
+            </div>
+
+            <div class="chat-history" id="chat-history">
+                <!-- Welcome Message -->
+                <div class="chat-bubble agent">
+                    <div class="bubble-content">
+                        Hello! I am <strong>ARVIS</strong>, your personal AI agentic system. All systems are initialized and ready. I have full computer control capabilities, including app launches, system metric scrapers, sandboxed code executors, file managers, and SMTP email sending. How can I help you today?
+                    </div>
+                </div>
+            </div>
+
+            <!-- ReAct Timeline Steps -->
+            <div class="timeline-log collapsed" id="timeline-log">
+                <div class="timeline-header" id="timeline-header-btn">
+                    <span>ReAct Core Logs</span>
+                    <span id="timeline-chevron"><i class="fa-solid fa-chevron-up"></i></span>
+                </div>
+                <div class="timeline-body" id="timeline-body">
+                    <!-- Dynamic timeline step nodes inserted here -->
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-panel">
+                <button class="mic-btn" id="mic-record-btn" title="Speak to ARVIS (Web Speech API)">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+                <input type="text" id="chat-input" placeholder="Type your command here (e.g. Open chrome, execute Fibonacci, take screenshot)..." autocomplete="off" />
+                <button class="send-btn" id="send-btn">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Modal to display screenshot preview -->
+<div class="screenshot-modal hidden" id="screenshot-modal">
+    <div class="modal-content glass-panel animate-zoom">
+        <div class="modal-header">
+            <h3>Screenshot Captured</h3>
+            <button class="close-modal-btn" id="close-modal-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <img src="" id="screenshot-img" alt="Captured desktop screen" />
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Load Socket.IO client -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"></script>
+<!-- Particle Background script -->
+<script src="{{ url_for('static', filename='js/visualizer.js') }}"></script>
+<!-- Voice processing script -->
+<script src="{{ url_for('static', filename='js/voice.js') }}"></script>
+<!-- Chat client logic -->
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+<script>
+function clearChatLogs() {
+    if (!confirm("Are you sure you want to permanently clear all conversation history and task logs?")) {
+        return;
+    }
+    fetch('/api/tasks/clear', { method: 'POST' })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                window.location.reload();
+            } else {
+                alert("Failed to clear logs: " + data.message);
+            }
+        })
+        .catch(err => {
+            alert("Request failed: " + err);
+        });
+}
+</script>
+{% endblock %}

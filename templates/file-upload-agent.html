@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent — File Upload</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Markdown Renderer -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+  :root {
+    --bg:#0d0f14;--surface:#13161e;--surface2:#1a1e2a;
+    --border:rgba(255,255,255,0.07);--border-hover:rgba(255,255,255,0.15);
+    --accent:#5b8fff;--accent-dim:rgba(91,143,255,0.12);
+    --green:#3dd68c;--green-dim:rgba(61,214,140,0.1);
+    --red:#f87171;--red-dim:rgba(248,113,113,0.1);
+    --yellow:#fbbf24;--yellow-dim:rgba(251,191,36,0.1);
+    --text:#e8eaf0;--muted:#6b7280;
+    --mono:'DM Mono',monospace;--sans:'Sora',sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem}
+  .container{width:100%;max-width:580px}
+ 
+  /* Header */
+  .header{margin-bottom:1.5rem}
+  .header-tag{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .header-tag::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .header h1{font-size:24px;font-weight:600;letter-spacing:-.02em}
+  .header p{font-size:12px;color:var(--muted);margin-top:5px;font-weight:300}
+ 
+  /* Drop zone */
+  .drop-zone{border:1.5px dashed var(--border-hover);border-radius:12px;padding:2rem 1.5rem;text-align:center;cursor:pointer;transition:all .2s;background:var(--surface);position:relative;overflow:hidden}
+  .drop-zone::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,var(--accent-dim) 0%,transparent 70%);opacity:0;transition:opacity .3s}
+  .drop-zone:hover::before,.drop-zone.drag::before{opacity:1}
+  .drop-zone:hover,.drop-zone.drag{border-color:var(--accent);border-style:solid}
+  .upload-icon{width:44px;height:44px;background:var(--accent-dim);border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;transition:transform .2s}
+  .drop-zone:hover .upload-icon{transform:translateY(-2px)}
+  .upload-icon svg{width:20px;height:20px;stroke:var(--accent);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .drop-title{font-size:13px;font-weight:500;margin-bottom:3px}
+  .drop-sub{font-size:12px;color:var(--muted);font-weight:300}
+  .drop-sub span{color:var(--accent);font-weight:500;cursor:pointer}
+  .drop-types{margin-top:12px;display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+  .type-pill{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:4px;background:var(--surface2);color:var(--muted);border:.5px solid var(--border)}
+  #fileInput{display:none}
+ 
+  /* Token limit slider */
+  .token-control{margin-top:10px;padding:10px 14px;background:var(--surface);border:.5px solid var(--border);border-radius:8px;display:flex;align-items:center;gap:12px}
+  .token-control label{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
+  .token-control input[type=range]{flex:1;accent-color:var(--accent);height:4px;cursor:pointer}
+  .token-val{font-family:var(--mono);font-size:11px;color:var(--accent);white-space:nowrap;min-width:50px;text-align:right}
+ 
+  /* File list */
+  .file-list{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+  .file-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface);border-radius:8px;border:.5px solid var(--border);animation:slideIn .18s ease;transition:border-color .2s}
+  .file-item:hover{border-color:var(--border-hover)}
+  .file-item.warn{border-color:rgba(251,191,36,.35)}
+  .file-item.done{border-color:rgba(61,214,140,.35)}
+  @keyframes slideIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+  .file-ext{font-family:var(--mono);font-size:9px;font-weight:500;width:34px;height:34px;border-radius:7px;display:flex;align-items:center;justify-content:center;letter-spacing:.05em;flex-shrink:0;text-transform:uppercase}
+  .ext-pdf{background:rgba(248,113,113,.12);color:#f87171}
+  .ext-txt{background:rgba(156,163,175,.12);color:#9ca3af}
+  .ext-csv{background:rgba(61,214,140,.12);color:#3dd68c}
+  .ext-json{background:rgba(251,191,36,.12);color:#fbbf24}
+  .ext-docx{background:rgba(91,143,255,.12);color:#5b8fff}
+  .ext-md{background:rgba(167,139,250,.12);color:#a78bfa}
+  .ext-img{background:rgba(251,146,60,.12);color:#fb923c}
+  .ext-other{background:rgba(107,114,128,.12);color:#6b7280}
+  .file-info{flex:1;min-width:0}
+  .file-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .file-meta{display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap}
+  .file-size{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .token-badge{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:4px;background:var(--accent-dim);color:var(--accent)}
+  .token-badge.over{background:var(--yellow-dim);color:var(--yellow)}
+  .compress-badge{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:4px;background:var(--green-dim);color:var(--green)}
+  .remove-btn{background:none;border:none;cursor:pointer;color:var(--muted);padding:4px;border-radius:5px;display:flex;align-items:center;transition:all .15s;flex-shrink:0}
+  .remove-btn:hover{color:var(--red);background:var(--red-dim)}
+  .remove-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+ 
+  /* Summary */
+  .summary-bar{margin-top:8px;padding:10px 14px;background:var(--surface);border:.5px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:space-between}
+  .summary-bar.hidden{display:none}
+  .summary-left{font-size:12px;color:var(--muted);font-family:var(--mono)}
+  .summary-right{font-size:12px;font-family:var(--mono);color:var(--green)}
+ 
+  /* Question input */
+  .question-wrap{margin-top:8px;position:relative}
+  .question-wrap textarea{width:100%;padding:10px 12px;background:var(--surface);border:.5px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--sans);font-size:13px;resize:none;outline:none;transition:border-color .2s;line-height:1.5}
+  .question-wrap textarea:focus{border-color:var(--accent)}
+  .question-wrap textarea::placeholder{color:var(--muted)}
+ 
+  /* Send button */
+  .send-btn{margin-top:8px;width:100%;padding:11px;font-family:var(--sans);font-size:13px;font-weight:500;border-radius:9px;background:var(--accent);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s}
+  .send-btn:hover:not(:disabled){background:#7aaaff;transform:translateY(-1px)}
+  .send-btn:disabled{opacity:.35;cursor:not-allowed}
+  .send-btn svg{width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+ 
+  /* Response box */
+  .response-box{margin-top:12px;padding:14px;background:var(--surface);border:.5px solid var(--border);border-radius:10px;display:none}
+  .response-box.visible{display:block}
+  .response-box.warn{border-color:rgba(251,191,36,.35)}
+  .response-label{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .response-label::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse 1.5s infinite}
+  .response-text{font-size:13px;color:var(--text);line-height:1.7;font-weight:300}
+  .response-text h2  { font-size:1.2em; margin:12px 0 6px; color:#fff; }
+  .response-text h3  { font-size:1.05em; margin:10px 0 4px; color:#ccc; }
+  .response-text p   { margin:6px 0; line-height:1.6; }
+  .response-text ul,
+  .response-text ol  { padding-left:20px; margin:6px 0; }
+  .response-text li  { margin:3px 0; }
+  .response-text hr  { border:none; border-top:1px solid #444; margin:12px 0; }
+  .response-text pre { background:#1e1e1e; padding:10px; border-radius:6px;
+                       overflow-x:auto; font-size:0.85em; margin:8px 0; }
+  .response-text code{ background:#2a2a2a; padding:1px 5px;
+                       border-radius:3px; font-size:0.9em; }
+  .response-text strong { color:#fff; font-weight:700; }
+ 
+  /* Compression info */
+  .compress-info{margin-top:8px;padding:8px 12px;background:var(--green-dim);border:.5px solid rgba(61,214,140,.2);border-radius:7px;font-family:var(--mono);font-size:11px;color:var(--green);display:none}
+  .compress-info.visible{display:block}
+ 
+  /* Toast */
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(8px);background:var(--surface2);border:.5px solid var(--border-hover);color:var(--text);padding:9px 16px;border-radius:8px;font-size:12px;opacity:0;pointer-events:none;transition:all .25s;white-space:nowrap;font-family:var(--mono)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+ 
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="header-tag">AI Agent</div>
+    <h1>Upload & Fetch Details</h1>
+    <p>Files are compressed before sending — stays within Groq's 6k token limit.</p>
+  </div>
+ 
+  <!-- Drop zone -->
+  <div class="drop-zone" id="dropZone" onclick="triggerPicker()">
+    <div class="upload-icon">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    </div>
+    <p class="drop-title">Drop files here</p>
+    <p class="drop-sub">or <span onclick="event.stopPropagation();triggerPicker()">browse from laptop</span></p>
+    <div class="drop-types">
+      <span class="type-pill">PDF</span><span class="type-pill">TXT</span>
+      <span class="type-pill">CSV</span><span class="type-pill">JSON</span>
+      <span class="type-pill">DOCX</span><span class="type-pill">MD</span>
+      <span class="type-pill">PNG/JPG</span>
+    </div>
+  </div>
+  <input type="file" id="fileInput" multiple accept=".pdf,.txt,.csv,.json,.docx,.md,.png,.jpg,.jpeg">
+ 
+  <!-- Token limit control -->
+  <div class="token-control">
+    <label>Token budget:</label>
+    <input type="range" id="tokenSlider" min="500" max="3500" step="500" value="2500" oninput="updateSlider()">
+    <span class="token-val" id="tokenVal">3,500</span>
+  </div>
+ 
+  <div class="file-list" id="fileList"></div>
+ 
+  <div class="compress-info" id="compressInfo"></div>
+ 
+  <div class="summary-bar hidden" id="summaryBar">
+    <span class="summary-left" id="summaryLeft"></span>
+    <span class="summary-right" id="summaryRight"></span>
+  </div>
+ 
+  <!-- Question input -->
+  <div class="question-wrap" style="margin-top:10px">
+    <textarea id="questionInput" rows="2" placeholder="What do you want to know from these files? e.g. Summarize, extract names, find totals…"></textarea>
+  </div>
+ 
+  <button class="send-btn" id="sendBtn" disabled onclick="handleSend()">
+    <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    Extract Details with AI
+  </button>
+ 
+  <!-- AI Response -->
+  <div class="response-box" id="responseBox">
+    <div class="response-label">AI Response</div>
+    <div class="response-text" id="responseText"></div>
+  </div>
+</div>
+ 
+<div class="toast" id="toast"></div>
+ 
+<script>
+// ─── CONFIG ────────────────────────────────────────────────
+const GROQ_API_KEY = 'YOUR_GROQ_API_KEY';   // 🔑 Replace this
+const GROQ_MODEL   = 'llama3-8b-8192';
+const GROQ_URL     = 'https://api.groq.com/openai/v1/chat/completions';
+// ───────────────────────────────────────────────────────────
+ 
+const fileInput   = document.getElementById('fileInput');
+const dropZone    = document.getElementById('dropZone');
+const fileListEl  = document.getElementById('fileList');
+const sendBtn     = document.getElementById('sendBtn');
+const summaryBar  = document.getElementById('summaryBar');
+const summaryLeft = document.getElementById('summaryLeft');
+const summaryRight= document.getElementById('summaryRight');
+const toastEl     = document.getElementById('toast');
+const responseBox = document.getElementById('responseBox');
+const responseText= document.getElementById('responseText');
+const compressInfo= document.getElementById('compressInfo');
+const tokenSlider = document.getElementById('tokenSlider');
+const tokenValEl  = document.getElementById('tokenVal');
+ 
+let files = [];
+ 
+const EXT_CLASS = {pdf:'ext-pdf',txt:'ext-txt',csv:'ext-csv',json:'ext-json',docx:'ext-docx',md:'ext-md',png:'ext-img',jpg:'ext-img',jpeg:'ext-img'};
+ 
+function getExt(name){ return name.split('.').pop().toLowerCase(); }
+function fmtSize(b){ return b<1024?b+'B':b<1048576?(b/1024).toFixed(1)+'KB':(b/1048576).toFixed(1)+'MB'; }
+function fmtTokens(t){ return t>=1000?(t/1000).toFixed(1)+'k':String(t); }
+function estTokens(text){ return Math.ceil(text.length / 4); }
+function getTokenBudget(){ return parseInt(tokenSlider.value); }
+ 
+function updateSlider(){
+  tokenValEl.textContent = parseInt(tokenSlider.value).toLocaleString();
+  render();
+}
+ 
+function triggerPicker(){ fileInput.value=''; fileInput.click(); }
+ 
+function showToast(msg, ms=2600){
+  toastEl.textContent=msg; toastEl.classList.add('show');
+  setTimeout(()=>toastEl.classList.remove('show'), ms);
+}
+ 
+// ─── COMPRESSION ENGINE ────────────────────────────────────
+ 
+/* Remove blank lines, trim each line, collapse repeated spaces */
+function cleanText(raw){
+  return raw
+    .split('\n')
+    .map(l => l.replace(/\s+/g,' ').trim())
+    .filter(l => l.length > 0)
+    .join('\n');
+}
+ 
+/* CSV: keep header + up to maxRows rows, drop empty cols */
+function compressCSV(raw, maxRows=80){
+  const lines = raw.split('\n').map(l=>l.trim()).filter(Boolean);
+  if(lines.length <= maxRows+1) return cleanText(raw);
+  const header = lines[0];
+  const data   = lines.slice(1, maxRows+1);
+  const skipped = lines.length - 1 - maxRows;
+  return [header, ...data, `[...${skipped} more rows omitted]`].join('\n');
+}
+ 
+/* JSON: stringify without indentation, truncate if still large */
+function compressJSON(raw){
+  try {
+    const obj = JSON.parse(raw);
+    return JSON.stringify(obj); // remove all whitespace/indentation
+  } catch {
+    return cleanText(raw);
+  }
+}
+ 
+/* Generic smart trim: keep head + tail for context */
+function smartTrim(text, maxChars){
+  if(text.length <= maxChars) return text;
+  const head = Math.floor(maxChars * 0.65);
+  const tail  = Math.floor(maxChars * 0.35);
+  return text.slice(0, head)
+    + `\n\n[... ${text.length - head - tail} chars omitted to fit token limit ...]\n\n`
+    + text.slice(-tail);
+}
+ 
+/* Master compress: apply type-specific + generic trim */
+function compressContent(rawText, filename, tokenBudget){
+  const e = getExt(filename);
+  // Reserve ~500 tokens for prompt overhead + question + reply header
+  const maxChars = (tokenBudget - 500) * 4;
+ 
+  let compressed = rawText;
+ 
+  if(e === 'csv')        compressed = compressCSV(rawText);
+  else if(e === 'json')  compressed = compressJSON(rawText);
+  else                   compressed = cleanText(rawText);
+ 
+  // Final size guard
+  compressed = smartTrim(compressed, maxChars);
+  return compressed;
+}
+ 
+// ──────────────────────────────────────────────────────────
+ 
+function addFiles(incoming){
+  const arr = Array.from(incoming);
+  let skipped = 0;
+  const existing = new Set(files.map(f=>f.name+'_'+f.size));
+  arr.forEach(f=>{
+    if(f.size > 5*1024*1024){ skipped++; return; }
+    if(existing.has(f.name+'_'+f.size)) return;
+    files.push(f);
+  });
+  if(skipped) showToast(`${skipped} file(s) skipped — over 5 MB`);
+  render();
+}
+ 
+function removeFile(i){ files.splice(i,1); render(); }
+ 
+function render(){
+  fileListEl.innerHTML='';
+  const budget = getTokenBudget();
+  let totalEst = 0;
+ 
+  files.forEach((f,i)=>{
+    const e   = getExt(f.name);
+    const cls = EXT_CLASS[e]||'ext-other';
+    // Rough raw token estimate
+    const rawTok = Math.ceil(f.size / 4);
+    // Compressed estimate (CSV/JSON compress well, text ~70%)
+    const compRatio = ['csv','json'].includes(e) ? 0.4 : 0.65;
+    const estTok = Math.ceil(rawTok * compRatio);
+    totalEst += estTok;
+    const over = totalEst > budget;
+ 
+    const item = document.createElement('div');
+    item.className = 'file-item' + (over?' warn':'');
+    item.innerHTML = `
+      <div class="file-ext ${cls}">${e}</div>
+      <div class="file-info">
+        <div class="file-name" title="${f.name}">${f.name}</div>
+        <div class="file-meta">
+          <span class="file-size">${fmtSize(f.size)}</span>
+          <span class="token-badge ${over?'over':''}">~${fmtTokens(estTok)} tokens</span>
+          <span class="compress-badge">compressed</span>
+        </div>
+      </div>
+      <button class="remove-btn" onclick="removeFile(${i})">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>`;
+    fileListEl.appendChild(item);
+  });
+ 
+  const has = files.length > 0;
+  sendBtn.disabled = !has;
+ 
+  if(has){
+    summaryBar.classList.remove('hidden');
+    summaryLeft.textContent  = `${files.length} file${files.length>1?'s':''} attached`;
+    summaryRight.textContent = `~${fmtTokens(totalEst)} tokens (compressed)`;
+  } else {
+    summaryBar.classList.add('hidden');
+  }
+}
+ 
+/* Drag & drop */
+dropZone.addEventListener('dragover', e=>{e.preventDefault();dropZone.classList.add('drag')});
+['dragleave','dragend'].forEach(ev=>dropZone.addEventListener(ev,()=>dropZone.classList.remove('drag')));
+dropZone.addEventListener('drop', e=>{
+  e.preventDefault(); dropZone.classList.remove('drag');
+  addFiles(e.dataTransfer.files);
+});
+fileInput.addEventListener('change', e=>addFiles(e.target.files));
+ 
+/* Read file as text */
+function readFile(file){
+  return new Promise((resolve,reject)=>{
+    const e = getExt(file.name);
+    const reader = new FileReader();
+    if(['png','jpg','jpeg'].includes(e)){
+      resolve(`[Image file: ${file.name} — ${fmtSize(file.size)}. Describe any text or data visible in this image if possible.]`);
+    } else {
+      reader.onload = ()=>resolve(reader.result);
+      reader.onerror = ()=>reject(new Error('Cannot read '+file.name));
+      reader.readAsText(file);
+    }
+  });
+}
+ 
+/* Main send handler */
+async function handleSend(){
+  if(!files.length) return;
+  const question = document.getElementById('questionInput').value.trim()
+    || 'Extract and summarize the key details from these files.';
+ 
+  sendBtn.disabled = true;
+  sendBtn.innerHTML = `<svg viewBox="0 0 24 24" style="animation:spin 1s linear infinite;flex-shrink:0"><path d="M12 2a10 10 0 1 0 10 10" stroke="#fff" fill="none" stroke-width="2" stroke-linecap="round"/></svg> Compressing & sending…`;
+  responseBox.classList.remove('visible');
+  compressInfo.classList.remove('visible');
+ 
+  try {
+    const budget = getTokenBudget();
+    const rawContents = await Promise.all(files.map(readFile));
+ 
+    // Compress each file individually
+    let originalChars = 0, compressedChars = 0;
+    const sections = rawContents.map((raw, i)=>{
+      originalChars += raw.length;
+      const compressed = compressContent(raw, files[i].name, budget);
+      compressedChars += compressed.length;
+      return `[FILE: ${files[i].name}]\n${compressed}`;
+    }).join('\n\n');
+ 
+    const savedPct = Math.round((1 - compressedChars/originalChars)*100);
+ 
+    // Show compression stats
+    compressInfo.textContent = `✓ Compressed ${fmtSize(originalChars)} → ${fmtSize(compressedChars)} (saved ${savedPct}% / ~${fmtTokens(Math.floor((originalChars-compressedChars)/4))} tokens)`;
+    compressInfo.classList.add('visible');
+ 
+    // Build minimal prompt
+    const systemPrompt = `You are a precise data extraction assistant. Extract only what is asked. Be concise. No filler text.`;
+    const userPrompt   = `${sections}\n\n---\nQuestion: ${question}`;
+ 
+    // Final token check
+    const totalTok = estTokens(systemPrompt + userPrompt);
+    if(totalTok > 4500){
+      showToast(`⚠ ${fmtTokens(totalTok)} tokens exceeds safe limit of 4,500. Reduce files or lower token budget.`);
+      resetBtn(); return;
+    }
+ 
+    // Call Groq
+    const res = await fetch(GROQ_URL, {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':`Bearer ${GROQ_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: GROQ_MODEL,
+        max_tokens: 1024,
+        temperature: 0.3,
+        messages:[
+          { role:'system', content: systemPrompt },
+          { role:'user',   content: userPrompt   }
+        ]
+      })
+    });
+ 
+    const data = await res.json();
+ 
+    if(data.error){
+      throw new Error(data.error.message || 'Groq API error');
+    }
+ 
+    const answer = data.choices?.[0]?.message?.content || 'No response.';
+    if (typeof marked !== 'undefined') {
+      responseText.innerHTML = marked.parse(answer);
+    } else {
+      responseText.textContent = answer;
+    }
+    responseBox.classList.add('visible');
+    document.querySelectorAll('.file-item').forEach(el=>el.classList.add('done'));
+    showToast('✓ Details extracted!');
+ 
+  } catch(err){
+    showToast('Error: ' + err.message, 4000);
+    responseText.textContent = '⚠ Error: ' + err.message;
+    responseBox.classList.add('visible');
+  }
+ 
+  resetBtn();
+}
+ 
+function resetBtn(){
+  sendBtn.innerHTML = `<svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Extract Details with AI`;
+  sendBtn.disabled = files.length === 0;
+}
+</script>
+</body>
+</html>
+ 

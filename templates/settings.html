@@ -1,0 +1,270 @@
+{% extends 'base.html' %}
+
+{% block title %}ARVIS AI - System Configurations{% endblock %}
+
+{% block content %}
+<div class="aura-orb aura-orb-1"></div>
+<div class="aura-orb aura-orb-2"></div>
+
+<div class="app-container">
+    <header class="glass-panel">
+        <div class="logo-section">
+            <div class="logo-orb">S</div>
+            <div class="logo-text">
+                <h1>ARVIS settings</h1>
+                <p>System Configuration & Security</p>
+            </div>
+        </div>
+        <div>
+            <a href="/dashboard" class="glass-btn"><i class="fa-solid fa-arrow-left"></i> Dashboard</a>
+        </div>
+    </header>
+
+    <div class="workspace" style="display: block; max-width: 900px; margin: 0 auto; padding: 20px 0;">
+        <main class="glass-panel" style="padding: 30px; border-radius: 16px;">
+            <div id="settings-alert" class="hidden" style="margin-bottom: 20px; padding: 15px; border-radius: 8px;"></div>
+            
+            <form id="settings-form" onsubmit="saveSettings(event)">
+                <!-- User & Agent -->
+                <div class="widget-header">
+                    <h2><i class="fa-solid fa-user-gear"></i> Personality Settings</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; font-weight: 500;">User Name</label>
+                        <input type="text" name="USER_NAME" value="{{ config_vars.USER_NAME }}" class="glass-input" style="width: 100%;" required />
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; font-weight: 500;">Agent Name</label>
+                        <input type="text" name="AGENT_NAME" value="{{ config_vars.AGENT_NAME }}" class="glass-input" style="width: 100%;" required />
+                    </div>
+                </div>
+
+                <!-- AI APIs -->
+                <div class="widget-header">
+                    <h2><i class="fa-solid fa-brain"></i> AI Provider API Keys</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 30px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 5px;">Google Gemini API Key</label>
+                        <input type="password" name="GEMINI_API_KEY" value="{{ config_vars.GEMINI_API_KEY }}" class="glass-input" style="width: 100%;" placeholder="AIzaSy..." />
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 5px;">Groq API Key (separate multiple with commas)</label>
+                        <input type="password" name="GROQ_API_KEY" value="{{ config_vars.GROQ_API_KEY }}" class="glass-input" style="width: 100%;" placeholder="gsk_..." />
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 5px;">OpenRouter API Key</label>
+                        <input type="password" name="OPENROUTER_API_KEY" value="{{ config_vars.OPENROUTER_API_KEY }}" class="glass-input" style="width: 100%;" placeholder="sk-or-v1-..." />
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 5px;">Anthropic Claude API Key</label>
+                        <input type="password" name="CLAUDE_API_KEY" value="{{ config_vars.CLAUDE_API_KEY }}" class="glass-input" style="width: 100%;" placeholder="sk-ant-..." />
+                    </div>
+                </div>
+
+                <!-- Local LLM Ollama -->
+                <div class="widget-header">
+                    <h2><i class="fa-solid fa-server"></i> Local Ollama Settings</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 8px;">Ollama Host</label>
+                        <input type="text" name="OLLAMA_HOST" value="{{ config_vars.OLLAMA_HOST }}" class="glass-input" style="width: 100%;" placeholder="http://localhost:11434" />
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 8px;">Ollama Model</label>
+                        <input type="text" name="OLLAMA_MODEL" value="{{ config_vars.OLLAMA_MODEL }}" class="glass-input" style="width: 100%;" placeholder="llama3" />
+                    </div>
+                    <div style="grid-column: span 2; display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" name="OLLAMA_PREFERRED" id="ollama_pref" {% if config_vars.OLLAMA_PREFERRED %}checked{% endif %} style="width: 20px; height: 20px;" />
+                        <label for="ollama_pref" style="user-select: none; cursor: pointer;">Prefer local Ollama offline execution over online APIs</label>
+                    </div>
+                </div>
+
+                <!-- Integrations -->
+                <div class="widget-header">
+                    <h2><i class="fa-solid fa-envelope"></i> SMTP Email Integration</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 8px;">Gmail Address</label>
+                        <input type="email" name="EMAIL_ADDRESS" value="{{ config_vars.EMAIL_ADDRESS }}" class="glass-input" style="width: 100%;" placeholder="yourmail@gmail.com" />
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 8px;">Google App Password</label>
+                        <input type="password" name="EMAIL_PASSWORD" value="{{ config_vars.EMAIL_PASSWORD }}" class="glass-input" style="width: 100%;" placeholder="xxxx xxxx xxxx xxxx" />
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div style="display: flex; gap: 20px; justify-content: flex-end;">
+                    <a href="/" class="glass-btn" style="background: rgba(255,255,255,0.05); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1);">Cancel</a>
+                    <button type="submit" class="glass-btn btn-active" style="background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue)); text-shadow: 0 0 10px rgba(0,242,254,0.5);"><i class="fa-solid fa-floppy-disk"></i> Save Configurations</button>
+                </div>
+            </form>
+
+            <!-- Active Tasks & Automation Scheduler -->
+            <div class="widget-header" style="margin-top: 40px;">
+                <h2><i class="fa-solid fa-clock"></i> Active Tasks & Automation Scheduler</h2>
+            </div>
+            <div class="glass-panel" style="background: rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 15px; margin-top: 15px; overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;" id="scheduler-table">
+                    <thead>
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 13px; text-transform: uppercase; color: var(--text-muted); font-family: 'Orbitron', sans-serif;">
+                            <th style="padding: 10px;">ID</th>
+                            <th style="padding: 10px;">Frequency</th>
+                            <th style="padding: 10px;">Scheduled Time</th>
+                            <th style="padding: 10px;">Task Prompt</th>
+                            <th style="padding: 10px; text-align: right;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scheduler-tbody">
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 20px; color: var(--text-muted);">Loading scheduled tasks...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+
+<style>
+.glass-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 10px 15px;
+    color: var(--text-light);
+    font-family: inherit;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+.glass-input:focus {
+    outline: none;
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+}
+.alert-success {
+    background: rgba(0, 255, 128, 0.1);
+    border: 1px solid rgba(0, 255, 128, 0.3);
+    color: #00ff80;
+    text-shadow: 0 0 5px rgba(0, 255, 128, 0.3);
+}
+.alert-danger {
+    background: rgba(255, 0, 128, 0.1);
+    border: 1px solid rgba(255, 0, 128, 0.3);
+    color: #ff0080;
+    text-shadow: 0 0 5px rgba(255, 0, 128, 0.3);
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function saveSettings(event) {
+    event.preventDefault();
+    const form = document.getElementById('settings-form');
+    const formData = new FormData(form);
+    
+    // Build JSON data payload
+    const data = {};
+    formData.forEach((value, key) => {
+        if (key === 'OLLAMA_PREFERRED') {
+            data[key] = true;
+        } else {
+            data[key] = value;
+        }
+    });
+    if (!data['OLLAMA_PREFERRED']) {
+        data['OLLAMA_PREFERRED'] = false;
+    }
+    
+    const alertBox = document.getElementById('settings-alert');
+    alertBox.className = 'hidden';
+    
+    fetch('/api/settings/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(resData => {
+        if (resData.success) {
+            alertBox.innerText = "✅ " + resData.message;
+            alertBox.className = "alert-success";
+            alertBox.style.display = "block";
+            // Refresh settings layout
+            setTimeout(() => {
+                window.location.href = "/";
+            }, 1500);
+        } else {
+            alertBox.innerText = "❌ Error: " + resData.message;
+            alertBox.className = "alert-danger";
+            alertBox.style.display = "block";
+        }
+    })
+    .catch(err => {
+        alertBox.innerText = "❌ Connection failed: " + err;
+        alertBox.className = "alert-danger";
+        alertBox.style.display = "block";
+    });
+}
+
+function loadScheduledTasks() {
+    const tbody = document.getElementById('scheduler-tbody');
+    fetch('/api/scheduler/list')
+        .then(res => res.json())
+        .then(tasks => {
+            tbody.innerHTML = '';
+            if (tasks.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 20px; color: var(--text-muted);">No background tasks scheduled.</td></tr>';
+                return;
+            }
+            tasks.forEach(task => {
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+                tr.style.fontSize = '14px';
+                tr.innerHTML = `
+                    <td style="padding: 10px; font-family: 'Fira Code', monospace; color: var(--neon-cyan);">${task.id}</td>
+                    <td style="padding: 10px; text-transform: capitalize;">${task.schedule}</td>
+                    <td style="padding: 10px; font-family: 'Fira Code', monospace;">${task.time}</td>
+                    <td style="padding: 10px; max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${task.prompt}</td>
+                    <td style="padding: 10px; text-align: right;">
+                        <button type="button" class="glass-btn" onclick="cancelTask('${task.id}')" style="background: rgba(255,0,0,0.15); border: 1px solid rgba(255,0,0,0.25); color: #ff3366; padding: 5px 12px; font-size: 12px; cursor: pointer; border-radius: 6px;"><i class="fa-solid fa-circle-xmark"></i> Cancel</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        })
+        .catch(err => {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px; color: #ff3366;">Failed to load tasks: ${err}</td></tr>`;
+        });
+}
+
+function cancelTask(taskId) {
+    if (!confirm(`Are you sure you want to cancel and delete task ${taskId}?`)) {
+        return;
+    }
+    fetch('/api/scheduler/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: taskId })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            loadScheduledTasks();
+        } else {
+            alert("Error cancelling task: " + data.message);
+        }
+    })
+    .catch(err => alert("Request failed: " + err));
+}
+
+document.addEventListener('DOMContentLoaded', loadScheduledTasks);
+</script>
+{% endblock %}

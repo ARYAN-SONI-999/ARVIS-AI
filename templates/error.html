@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="app-container" style="justify-content: center; align-items: center; text-align: center;">
+    <div class="glass-panel" style="padding: 40px; max-width: 500px;">
+        <i class="fa-solid fa-triangle-exclamation" style="font-size: 60px; color: var(--neon-pink); margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(247,37,133,0.5));"></i>
+        <h1 style="font-family: 'Orbitron', sans-serif; font-size: 24px; color: #fff; margin-bottom: 10px;">CORE RUNTIME FAULT</h1>
+        <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 25px;">
+            The central routing layer experienced a crash or structural mismatch. Please verify parameters or check the log dump for debugging details.
+        </p>
+        <a href="/" class="glass-btn" style="text-decoration: none; width: fit-content; margin: 0 auto;">
+            <i class="fa-solid fa-house"></i> Return to Terminal
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,172 @@
+============================================================
+       ARVIS — FULL SYSTEM COMMAND REFERENCE
+       Generated: 2026-06-05  (Updated)
+============================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 📱  APP CONTROL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  open whatsapp              → Opens WhatsApp
+  turn on whatsapp           → Opens WhatsApp (alias)
+  open telegram              → Opens Telegram
+  launch telegram            → Opens Telegram (alias)
+  open chrome                → Opens Google Chrome
+  start chrome               → Opens Google Chrome (alias)
+  open edge                  → Opens Microsoft Edge
+  open firefox               → Opens Mozilla Firefox
+  open spotify               → Opens Spotify
+  open discord               → Opens Discord
+  open zoom                  → Opens Zoom
+  open teams                 → Opens Microsoft Teams
+  open microsoft teams       → Opens Microsoft Teams (alias)
+  open vscode                → Opens Visual Studio Code
+  open vs code               → Opens Visual Studio Code (alias)
+  open visual studio code    → Opens Visual Studio Code (alias)
+  open word                  → Opens Microsoft Word
+  open microsoft word        → Opens Microsoft Word (alias)
+  open excel                 → Opens Microsoft Excel
+  open microsoft excel       → Opens Microsoft Excel (alias)
+  open powerpoint            → Opens Microsoft PowerPoint
+  open ppt                   → Opens Microsoft PowerPoint (alias)
+  open notepad               → Opens Notepad
+  open paint                 → Opens MS Paint
+  open calculator            → Opens Calculator
+  open calc                  → Opens Calculator (alias)
+  open cmd                   → Opens Command Prompt
+  open command prompt        → Opens Command Prompt (alias)
+  open powershell            → Opens PowerShell
+  open explorer              → Opens File Explorer
+  open file explorer         → Opens File Explorer (alias)
+  open task manager          → Opens Task Manager
+  open vlc                   → Opens VLC Media Player
+  open vlc media player      → Opens VLC Media Player (alias)
+  open steam                 → Opens Steam
+  open snipping tool         → Opens Snipping Tool
+  open snip                  → Opens Snipping Tool (alias)
+  open settings              → Opens Windows Settings
+  open windows settings      → Opens Windows Settings (alias)
+  close [app name]           → Closes that app window
+  quit [app name]            → Closes that app window (alias)
+  exit [app name]            → Closes that app window (alias)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🔊  VOLUME CONTROL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  set volume to 50           → Sets volume to 50%
+  volume 80%                 → Sets volume to 80%
+  set volume to 0            → Silences volume
+  mute                       → Mutes system audio
+  unmute                     → Unmutes system audio
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 📶  WIFI CONTROL  ⚠ (Windows UAC popup will appear — click Yes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  turn off wifi              → Disables WiFi adapter
+  disable wifi               → Disables WiFi adapter (alias)
+  turn on wifi               → Enables WiFi adapter
+  enable wifi                → Enables WiFi adapter (alias)
+  check wifi                 → Shows SSID, signal, connection state
+  wifi status                → Shows WiFi info (alias)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🔵  BLUETOOTH CONTROL  ⚠ (Windows UAC popup will appear — click Yes)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  turn on bluetooth          → Enables Bluetooth
+  turn off bluetooth         → Disables Bluetooth
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🌟  BRIGHTNESS CONTROL  (Laptop displays only)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  set brightness to 80       → Sets screen brightness to 80%
+  set brightness to 30       → Dims screen to 30%
+  set brightness to 100      → Maximum brightness
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ ⚡  POWER MANAGEMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  lock screen                → Locks Windows session immediately
+  lock my screen             → Locks Windows session (alias)
+  sleep                      → Puts PC to sleep
+  put to sleep               → Puts PC to sleep (alias)
+  shutdown                   → Shuts down PC immediately
+  turn off computer          → Shuts down PC (alias)
+  shutdown in 60 seconds     → Shuts down after 60 seconds
+  restart                    → Restarts PC immediately
+  reboot                     → Restarts PC (alias)
+  restart in 30 seconds      → Restarts after 30 seconds
+  cancel shutdown            → Cancels any pending shutdown/restart
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🔋  BATTERY INFO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  battery                    → Shows charge %, status, time remaining
+  check battery              → Same as above (alias)
+  battery status             → Same as above (alias)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 📸  DESKTOP CONTROL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  take screenshot            → Captures full screen, saves to /static/assets/
+  screenshot                 → Same as above (alias)
+  click at 500 300           → Clicks at screen coordinates (x=500, y=300)
+  type hello world           → Types text at current cursor position
+  press ctrl+c               → Presses keyboard shortcut Ctrl+C
+  press ctrl+alt+del         → Presses that key combination
+  press win+d                → Shows desktop
+  focus notepad              → Brings that window to the foreground
+  focus chrome               → Brings Chrome to the foreground
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🔍  WEB SEARCH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  search Python tutorials    → Searches the web for results
+  look up iPhone 16 price    → Web search (alias)
+  what is the weather today  → Searches for current weather info
+  who is Elon Musk           → Searches and summarizes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 📁  FILE MANAGEMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  list files in C:\Users     → Lists all files in that folder
+  create file test.txt       → Creates a new empty file
+  delete file test.txt       → Deletes the specified file
+  move file a.txt to C:\backup → Moves file to new location
+  read file config.py        → Reads and shows file content
+  search files named *.py    → Finds files matching the pattern
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 🧮  MATH & CODE EXECUTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  calculate 15% of 2500      → Evaluates the math expression
+  what is sin(45)            → Trigonometry calculation
+  what is 2 ** 10            → Power calculation (= 1024)
+  run this python code: print("hi") → Executes Python code
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ 📧  EMAIL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  send email to x@gmail.com saying hello → Sends email via SMTP
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ ⏰  TIME, DATE & SYSTEM INFO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  what time is it            → Shows current system time (instant)
+  what is today's date       → Shows current date (instant)
+  system stats               → Shows RAM, CPU, disk usage
+  cpu usage                  → Shows CPU info (alias)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ ⏲️  TASK SCHEDULING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  remind me in 10 minutes to drink water → Sets a reminder
+  schedule task at 5pm to close chrome   → Schedules a task
+
+============================================================
+ NOTES:
+  ⚠  WiFi and Bluetooth commands trigger a Windows UAC prompt.
+     Click "Yes" to approve — ARVIS does not need to run as Admin.
+  ⚠  Brightness control works only on built-in laptop displays,
+     not on external monitors connected via HDMI/DisplayPort.
+  ℹ  You can say commands naturally — ARVIS understands phrases
+     like "turn on", "open", "launch", "start", "show" for apps.
+============================================================

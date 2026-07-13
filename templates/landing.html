@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARVIS AI — Futuristic Agentic Intelligence System</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Landing Styling -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+    <!-- Markdown Renderer -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+
+    <!-- Neural constellation background canvas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Mesh glow gradients background -->
+    <div class="mesh-glows">
+        <div class="glow-orb orb-cyan"></div>
+        <div class="glow-orb orb-violet"></div>
+    </div>
+
+    <!-- HUD Grid Line Overlay -->
+    <div class="hud-grid"></div>
+
+    <!-- Simulated Boot Sequence Loader -->
+    <div id="boot-sequence">
+        <div class="boot-terminal">
+            <!-- Dynamic boot lines are inserted here via landing.js -->
+        </div>
+    </div>
+
+    <!-- Main Page Content -->
+    <div class="container">
+        <!-- HUD Header -->
+        <header class="hud-header scroll-reveal">
+            <div class="logo-hud">
+                <div class="logo-glow-ring">A</div>
+                <div>
+                    <h1>ARVIS</h1>
+                    <p>SYSTEM LOADED</p>
+                </div>
+            </div>
+            <nav class="hud-nav">
+                <a href="#features" class="nav-link">CAPABILITIES</a>
+                <a href="#demo" class="nav-link">DEMO</a>
+                <a href="#architecture" class="nav-link">ARCHITECTURE</a>
+                <a href="#specs" class="nav-link">DIAGNOSTICS</a>
+            </nav>
+            <div class="header-status">
+                <div class="hud-pill">
+                    <span class="pill-dot"></span>
+                    <span>COGNITIVE CORE: ONLINE</span>
+                </div>
+                <a href="/" class="btn-hud btn-secondary" style="padding: 8px 16px; font-size: 11px;">
+                    <i class="fa-solid fa-terminal"></i> GOTO APP
+                </a>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero scroll-reveal">
+            <div class="hero-text">
+                <h2 class="hero-title">
+                    <span class="letter">I</span> 
+                    <span class="letter">A</span> 
+                    <span class="letter">M</span> 
+                    <span class="letter gradient-text">A</span> 
+                    <span class="letter gradient-text">R</span> 
+                    <span class="letter gradient-text">V</span> 
+                    <span class="letter gradient-text">I</span> 
+                    <span class="letter gradient-text">S</span>
+                </h2>
+                <div class="hero-subtitle" id="typewriter">
+                    <!-- Typewriter effect inserts sentences here -->
+                </div>
+                <div class="cta-group">
+                    <a href="#demo" class="btn-hud btn-primary">
+                        <i class="fa-solid fa-bolt"></i> INITIALIZE INTERACTION
+                    </a>
+                    <a href="/" class="btn-hud btn-secondary">
+                        <i class="fa-solid fa-gear"></i> LAUNCH SYSTEM CONTROL
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="core-hud-ring ring-outer"></div>
+                <div class="core-hud-ring ring-mid"></div>
+                <div class="core-avatar">
+                    <div class="avatar-orb-inner"></div>
+                </div>
+                <div class="scroll-indicator">
+                    <span>SYSTEM READY</span>
+                    <div class="scroll-line"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Divider Line -->
+        <div class="hud-divider scroll-reveal"></div>
+
+        <!-- What is ARVIS Section -->
+        <section class="features scroll-reveal" id="features">
+            <div class="section-title">
+                <h3>CORE AGENT CAPABILITIES</h3>
+                <p>Equipped with a rich stack of cognitive, automation, and processing modules.</p>
+            </div>
+            <div class="features-grid">
+                <!-- Card 1 -->
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-brain"></i></div>
+                    <h4>Semantic Memory Core</h4>
+                    <p>Integrates vector similarity searches (RAG) over stored SQLite conversation indices, recalling contextual ideas instead of raw strings.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-eye"></i></div>
+                    <h4>Desktop Screen Vision</h4>
+                    <p>Takes instant desktop screenshots and pipes visual base64 data to multimodal models for debugging, screen scraping, or visual tracking.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-earth-americas"></i></div>
+                    <h4>Web Scraping Engine</h4>
+                    <p>Visits specific webpage URLs on command, strips headers/footers/boilerplates, and extracts clean context directly into the reasoning loop.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-chart-pie"></i></div>
+                    <h4>Code Execution & Plots</h4>
+                    <p>Runs generated scripts in a safe Python/JS sandbox, automatically moves Matplotlib outputs to web folders, and displays graphs inline.</p>
+                </div>
+                <!-- Card 5 -->
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-users-gear"></i></div>
+                    <h4>Multi-Agent Workflows</h4>
+                    <p>Delegates tasks to virtual sub-assistants (coder, reviewer, analyst, researcher) who perform synchronous sub-loops and combine outputs.</p>
+                </div>
+                <!-- Card 6 -->
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-microphone-lines"></i></div>
+                    <h4>HUD Voice Pipeline</h4>
+                    <p>Listens for wake words locally (pre-calibrated STT) and replies with text-to-speech stripped of markdown/emoji syntax for natural voices.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Agent Command Matrix Section -->
+        <section class="matrix-demo scroll-reveal" id="demo">
+            <div class="section-title">
+                <h3>AGENT COMMAND MATRIX</h3>
+                <p>Explore sample instructions and visualize the underlying cognitive processing pipeline.</p>
+            </div>
+            <div class="matrix-wrapper glass-panel">
+                <div class="matrix-sidebar">
+                    <h5>SELECT CAPABILITY</h5>
+                    <button class="matrix-btn active" id="btn-sys" onclick="showMatrixTab('sys')">
+                        🖥️ System Automation
+                    </button>
+                    <button class="matrix-btn" id="btn-mem" onclick="showMatrixTab('mem')">
+                        🧠 Semantic Memory
+                    </button>
+                    <button class="matrix-btn" id="btn-vis" onclick="showMatrixTab('vis')">
+                        👁️ Desktop Vision
+                    </button>
+                    <button class="matrix-btn" id="btn-cod" onclick="showMatrixTab('cod')">
+                        📊 Code Sandbox
+                    </button>
+                    <button class="matrix-btn" id="btn-web" onclick="showMatrixTab('web')">
+                        🔍 Web Scraper
+                    </button>
+                </div>
+                <div class="matrix-main">
+                    <div class="matrix-header">
+                        <div class="console-dots">
+                            <span class="dot dot-red"></span>
+                            <span class="dot dot-yellow"></span>
+                            <span class="dot dot-green"></span>
+                        </div>
+                        <div class="console-title" id="matrix-terminal-title">system_automation.sh</div>
+                        <div class="matrix-badge">HUD LOG</div>
+                    </div>
+                    <div class="matrix-content" id="matrix-display">
+                        <!-- Default dynamic content: System Automation -->
+                        <div class="matrix-log-line user-input">> arvis "set system volume to 40%"</div>
+                        <div class="matrix-log-line step-thought">💭 <strong>Thought:</strong> User wants to adjust Windows audio parameters. Calling system control module.</div>
+                        <div class="matrix-log-line step-tool">🛠️ <strong>Tool Call:</strong> system_control(action='volume', value=40)</div>
+                        <div class="matrix-log-line step-observation">✅ <strong>Observation:</strong> volume level successfully configured to 40%</div>
+                        <div class="matrix-log-line final-reply">🤖 <strong>ARVIS:</strong> Windows system volume has been adjusted to 40%. Audio channels calibrated.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cognitive Parameters Panel Section -->
+        <section class="cognitive-board scroll-reveal" id="cognitive-board">
+            <div class="section-title">
+                <h3>COGNITIVE PARAMETER DECK</h3>
+                <p>Fine-tune ARVIS runtime behavior. Adjust reasoning factors, token constraints, and pipeline routes.</p>
+            </div>
+            <div class="cognitive-deck glass-panel">
+                <!-- Control Card 1 -->
+                <div class="deck-card">
+                    <div class="deck-header">
+                        <h6>REASONING TEMPERATURE</h6>
+                        <span class="deck-value" id="temp-val">0.2</span>
+                    </div>
+                    <p class="deck-desc">Controls deterministic accuracy vs creative diversity.</p>
+                    <input type="range" class="deck-slider" id="temp-slider" min="0.0" max="1.0" step="0.1" value="0.2" oninput="updateDeckVal('temp', this.value)">
+                    <div class="deck-status" id="temp-status">Deterministic. Optimized for coding & debugging.</div>
+                </div>
+                <!-- Control Card 2 -->
+                <div class="deck-card">
+                    <div class="deck-header">
+                        <h6>MAX REACT ITERATIONS</h6>
+                        <span class="deck-value" id="iter-val">8</span>
+                    </div>
+                    <p class="deck-desc">Sets maximum planning steps in the reasoning loop.</p>
+                    <input type="range" class="deck-slider" id="iter-slider" min="3" max="15" step="1" value="8" oninput="updateDeckVal('iter', this.value)">
+                    <div class="deck-status" id="iter-status">Balanced depth. Avoids execution loop locks.</div>
+                </div>
+                <!-- Control Card 3 -->
+                <div class="deck-card">
+                    <div class="deck-header">
+                        <h6>ACTIVE PROVIDER KEYS</h6>
+                        <span class="deck-value" id="key-val">5 / 5</span>
+                    </div>
+                    <p class="deck-desc">Monitors rotated API keys in the latency fallback cycle.</p>
+                    <div class="deck-toggles">
+                        <span class="deck-indicator active">Groq Key A</span>
+                        <span class="deck-indicator active">Groq Key B</span>
+                        <span class="deck-indicator active">Claude API</span>
+                        <span class="deck-indicator active">Gemini Vision</span>
+                        <span class="deck-indicator active">Ollama Local</span>
+                    </div>
+                    <div class="deck-status">Key failovers configured. Fallbacks trigger in 12s.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Flow Schematic -->
+        <section class="architecture scroll-reveal" id="architecture">
+            <div class="section-title">
+                <h3>COGNITIVE ARCHITECTURE FLOW</h3>
+                <p>Visualizing data processing channels: from trigger capture to tool execution.</p>
+            </div>
+            <div class="arch-schematic glass-panel">
+                <svg class="flow-svg" viewBox="0 0 900 350">
+                    <!-- Connections -->
+                    <path class="flow-line flow-line-active" d="M120 70 L250 175" />
+                    <path class="flow-line flow-line-active" d="M120 175 L250 175" />
+                    <path class="flow-line flow-line-active" d="M120 280 L250 175" />
+                    
+                    <path class="flow-line flow-line-active" d="M410 175 L520 175" />
+                    
+                    <path class="flow-line flow-line-active" d="M680 175 L790 70" />
+                    <path class="flow-line flow-line-active" d="M680 175 L790 175" />
+                    <path class="flow-line flow-line-active" d="M680 175 L790 280" />
+
+                    <!-- Node 1: Input Devices -->
+                    <rect class="flow-node flow-node-1" x="20" y="30" width="100" height="80" rx="6" />
+                    <text class="flow-text" x="70" y="70">SPEECH / CHAT</text>
+                    <text class="flow-subtext" x="70" y="90">STT Engine</text>
+
+                    <!-- Node 2: Vision Cap -->
+                    <rect class="flow-node flow-node-2" x="20" y="135" width="100" height="80" rx="6" />
+                    <text class="flow-text" x="70" y="175">DESKTOP CAP</text>
+                    <text class="flow-subtext" x="70" y="195">Vision capture</text>
+
+                    <!-- Node 3: Memory RAG -->
+                    <rect class="flow-node flow-node-3" x="20" y="240" width="100" height="80" rx="6" />
+                    <text class="flow-text" x="70" y="280">SQL MEMORY</text>
+                    <text class="flow-subtext" x="70" y="300">Vector Embeddings</text>
+
+                    <!-- Node 4: ReAct Core Controller -->
+                    <rect class="flow-node flow-node-active flow-node-4" x="250" y="105" width="160" height="140" rx="10" />
+                    <text class="flow-text" x="330" y="155" style="font-size: 14px; fill: var(--accent-primary)">ReAct LOGIC CORE</text>
+                    <text class="flow-text" x="330" y="180">Groq Llama 3.3</text>
+                    <text class="flow-subtext" x="330" y="210">Multi-Key rotation</text>
+
+                    <!-- Node 5: Router -->
+                    <rect class="flow-node flow-node-5" x="520" y="135" width="160" height="80" rx="6" />
+                    <text class="flow-text" x="600" y="175">TASK ROUTER</text>
+                    <text class="flow-subtext" x="600" y="195">inspect.signature()</text>
+
+                    <!-- Node 6: OS Control -->
+                    <rect class="flow-node flow-node-6" x="790" y="30" width="100" height="80" rx="6" />
+                    <text class="flow-text" x="840" y="70">SYS CONTROL</text>
+                    <text class="flow-subtext" x="840" y="90">Power / volume</text>
+
+                    <!-- Node 7: Exec Sandbox -->
+                    <rect class="flow-node flow-node-7" x="790" y="135" width="100" height="80" rx="6" />
+                    <text class="flow-text" x="840" y="175">SANDBOX RUN</text>
+                    <text class="flow-subtext" x="840" y="195">Python execution</text>
+
+                    <!-- Node 8: Web scraper -->
+                    <rect class="flow-node flow-node-8" x="790" y="240" width="100" height="80" rx="6" />
+                    <text class="flow-text" x="840" y="280">WEB SCRAPER</text>
+                    <text class="flow-subtext" x="840" y="300">BeautifulSoup</text>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Technical Diagnostics Board -->
+        <section class="diagnostics scroll-reveal">
+            <div class="section-title">
+                <h3>SYSTEM SPECIFICATIONS</h3>
+                <p>Live stats reporting status metrics of the active ARVIS thread.</p>
+            </div>
+            <div class="diag-grid">
+                <div class="diag-card">
+                    <h6>MEMORY LOGS</h6>
+                    <div class="diag-num"><span class="count-up" data-target="24">0</span></div>
+                    <div class="diag-status-text">768-D EMBEDDINGS</div>
+                </div>
+                <div class="diag-card">
+                    <h6>PROVIDER PERFORMANCE</h6>
+                    <div class="diag-num"><span class="count-up" data-target="99">0</span>%</div>
+                    <div class="diag-status-text">LLAMA-3.3-70B</div>
+                </div>
+                <div class="diag-card">
+                    <h6>DIAGNOSTICS RUNTIME</h6>
+                    <div class="diag-num"><span class="count-up" data-target="124">0</span>h</div>
+                    <div class="diag-status-text">HOURS ACTIVE</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HUD Footer -->
+        <footer class="hud-footer scroll-reveal">
+            <div class="footer-content">
+                <p>&copy; 2026 ARVIS AI. SYSTEM CONTROL INTERFACE.</p>
+                <div class="footer-links">
+                    <a href="/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                    <a href="/"><i class="fa-solid fa-terminal"></i> Launch app</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Custom Glowing Cursor -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+
+    <!-- Load Socket.IO client -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"></script>
+    <!-- Custom visualizer / visual logic -->
+    <script src="{{ url_for('static', filename='js/landing.js') }}"></script>
+</body>
+</html>
